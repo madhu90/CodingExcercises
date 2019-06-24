@@ -70,7 +70,21 @@ private:
 		
 		std::cout << "a = " << a << ", b = " << b << ", c = " << c << ", d = " << d << std::endl;
 		std::cout << "    ac = " << ac << ", bd = " << bd << ", ad + bc = " << ad_bc << std::endl;
-
+		
+		/* Why do we multiply by right_idx here and not length/2 ?
+		 * Consider a situation where we have odd length numbers:
+		 * x = 12345    ----> a = 12, b = 345
+		 * y = 05678    ----> c = 05, d = 678
+		 * Here, how are a,b and c,d combined to get x and y?
+		 * x = 12*1000 + 345
+		 * y = 5*1000 + 345
+		 * The power of 10 is really the length of the right half
+		 * because that is how much the left half must be shifted
+		 * Also, in our split for odd length data, the left will always
+		 * be shorter (floor(length/2)) and the right will be larger 
+		 * ceil(length/2). So, we always pick the length of the right
+		 * half and use that as 10's exponent
+		 */
 		return std::pow(10, 2*right_idx)*ac + std::pow(10, right_idx)*ad_bc + bd;
 	}
 };
